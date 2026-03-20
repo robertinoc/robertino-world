@@ -128,9 +128,17 @@ export default function Universe() {
     setClickedPlanet(planet)
     setWarpColor(planet.color)
     setTimeout(() => setWarping(true), 850)
-    setTimeout(() => window.open(planet.url, '_blank'), 1700)
+    setTimeout(() => {
+      // Mobile browsers block window.open() inside setTimeout (popup blocker).
+      // Use location.href on mobile — always allowed, even deferred.
+      if (isMobile) {
+        window.location.href = planet.url
+      } else {
+        window.open(planet.url, '_blank')
+      }
+    }, 1700)
     setTimeout(() => { setClickedPlanet(null); setWarping(false) }, 2500)
-  }, [clickedPlanet, warping])
+  }, [clickedPlanet, warping, isMobile])
 
   const t   = T[lang]
   const cta = isMobile ? t.ctaMobile : t.ctaDesktop

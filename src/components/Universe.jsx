@@ -88,6 +88,25 @@ const PLANET_DEFS = [
     mobileLabelSide:  'right',
     coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
   },
+  // 4 — Apps  (star / moon — no photo, procedural glow)
+  {
+    id: 'apps',
+    name: { en: 'Apps', es: 'Apps' },
+    radius: 0.52,       mobileRadius: 0.4,
+    color: '#93c5fd',
+    emissive: '#3b82f6',
+    hasRings: false,
+    ringColor: null,
+    celestialType: 'star',
+    url: 'https://apps.robertino.world',
+    description: { en: 'Tools & Creations', es: 'Herramientas & Creaciones' },
+    texture: null,
+    desktopPos: [0, -2.6, 0],
+    mobilePos:  [0, -2.1, 0],
+    desktopLabelSide: 'right',
+    mobileLabelSide:  'right',
+    coords: { sector: 'λ-1', dist: '1.0 AU', type: 'Star' },
+  },
 ]
 
 export default function Universe() {
@@ -176,7 +195,7 @@ export default function Universe() {
         <CameraController target={clickedPlanet} isMobile={isMobile} />
         <ScreenPositionTracker planets={planets} hudPosRef={hudPosRef} />
         <EffectComposer>
-          <Bloom intensity={2.8} luminanceThreshold={0.04} luminanceSmoothing={0.9} radius={0.92} />
+          <Bloom intensity={1.8} luminanceThreshold={0.18} luminanceSmoothing={0.85} radius={0.88} />
           <Vignette eskil={false} offset={0.14} darkness={0.95} />
         </EffectComposer>
         <AdaptiveDpr pixelSizes={[0.5, 0.75, 1]} />

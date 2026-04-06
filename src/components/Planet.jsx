@@ -89,22 +89,16 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
       {isStar ? (
         // ── Star body ────────────────────────────────────────────────────────
         <>
-          {/* Bright white-blue core — high luminance triggers Bloom star effect */}
+          {/* Bright white-blue core — Bloom creates the star halo automatically */}
           <mesh ref={meshRef} {...pointerHandlers}>
             <sphereGeometry args={[data.radius, 32, 32]} />
             <meshBasicMaterial color="#dbeafe" />
           </mesh>
 
-          {/* Tight coloured halo — BackSide at small radius stays circular, not disc */}
-          <mesh ref={glowRef}>
-            <sphereGeometry args={[data.radius * 1.35, 16, 16]} />
-            <meshBasicMaterial
-              color={data.color}
-              transparent
-              opacity={0.18}
-              side={THREE.BackSide}
-              depthWrite={false}
-            />
+          {/* Invisible glow ref used only for useFrame pulse tracking */}
+          <mesh ref={glowRef} visible={false}>
+            <sphereGeometry args={[data.radius * 1.1, 8, 8]} />
+            <meshBasicMaterial transparent opacity={0} />
           </mesh>
         </>
       ) : (

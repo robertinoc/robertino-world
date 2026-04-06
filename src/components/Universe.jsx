@@ -49,7 +49,7 @@ const PLANET_DEFS = [
     desktopPos: [-5.5, 0, 0],
     mobilePos:  [-1.8, 3.4, 0],
     desktopLabelSide: 'left',
-    mobileLabelSide:  'right',
+    mobileLabelSide:  'below',
     coords: { sector: 'Ω-7', dist: '4.2 AU', freq: '432 Hz' },
   },
   // 2 — Ideas  (desktop: center | mobile: top-right)
@@ -67,7 +67,7 @@ const PLANET_DEFS = [
     desktopPos: [0, 0, 0],
     mobilePos:  [1.8, 3.4, 0],
     desktopLabelSide: 'below',
-    mobileLabelSide:  'left',
+    mobileLabelSide:  'below',
     coords: { sector: 'Δ-3', dist: '7.1 AU', freq: '528 Hz' },
   },
   // 3 — Professional  (desktop: right | mobile: bottom-left)
@@ -85,7 +85,7 @@ const PLANET_DEFS = [
     desktopPos: [5.5, 0, 0],
     mobilePos:  [-1.8, -0.6, 0],
     desktopLabelSide: 'right',
-    mobileLabelSide:  'right',
+    mobileLabelSide:  'below',
     coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
   },
   // 4 — Apps  (marketplace — procedural canvas texture, orbital ring)
@@ -104,7 +104,7 @@ const PLANET_DEFS = [
     desktopPos: [0, -2.8, 0],
     mobilePos:  [1.8, -0.6, 0],
     desktopLabelSide: 'right',
-    mobileLabelSide:  'left',
+    mobileLabelSide:  'below',
     coords: { sector: 'M-1', dist: '1.0 AU', apps: '∞ items' },
   },
 ]

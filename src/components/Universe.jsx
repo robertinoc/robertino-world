@@ -34,7 +34,7 @@ const T = {
 
 // ── Planet definitions ────────────────────────────────────────────────────
 const PLANET_DEFS = [
-  // 1 — Music  (desktop: left | mobile: top)
+  // 1 — Music  (desktop: left | mobile: top-left)
   {
     id: 'music',
     name: { en: 'Music', es: 'Música' },
@@ -47,12 +47,12 @@ const PLANET_DEFS = [
     description: { en: 'Sounds & Vibes', es: 'Sonidos & Vibras' },
     texture: '/images/planet-music.jpg',
     desktopPos: [-5.5, 0, 0],
-    mobilePos:  [0,  3.8, 0],
+    mobilePos:  [-1.8, 3.4, 0],
     desktopLabelSide: 'left',
     mobileLabelSide:  'right',
     coords: { sector: 'Ω-7', dist: '4.2 AU', freq: '432 Hz' },
   },
-  // 2 — Ideas  (desktop: center | mobile: middle)
+  // 2 — Ideas  (desktop: center | mobile: top-right)
   {
     id: 'ideas',
     name: { en: 'Ideas', es: 'Ideas' },
@@ -65,12 +65,12 @@ const PLANET_DEFS = [
     description: { en: 'Thoughts & Talk', es: 'Pensamientos & Charlas' },
     texture: '/images/planet-ideas.jpg?v=2',
     desktopPos: [0, 0, 0],
-    mobilePos:  [0, 1.5, 0],
+    mobilePos:  [1.8, 3.4, 0],
     desktopLabelSide: 'below',
     mobileLabelSide:  'left',
     coords: { sector: 'Δ-3', dist: '7.1 AU', freq: '528 Hz' },
   },
-  // 3 — Professional  (desktop: right | mobile: bottom)
+  // 3 — Professional  (desktop: right | mobile: bottom-left)
   {
     id: 'professional',
     name: { en: 'Professional', es: 'Profesional' },
@@ -83,7 +83,7 @@ const PLANET_DEFS = [
     description: { en: 'Work & Journey', es: 'Trabajo & Trayectoria' },
     texture: '/images/planet-professional.jpg',
     desktopPos: [5.5, 0, 0],
-    mobilePos:  [0, -0.3, 0],
+    mobilePos:  [-1.8, -0.6, 0],
     desktopLabelSide: 'right',
     mobileLabelSide:  'right',
     coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
@@ -102,9 +102,9 @@ const PLANET_DEFS = [
     description: { en: 'Tools & Marketplace', es: 'Herramientas & Marketplace' },
     texture: null,
     desktopPos: [0, -2.8, 0],
-    mobilePos:  [0, -2.0, 0],
+    mobilePos:  [1.8, -0.6, 0],
     desktopLabelSide: 'right',
-    mobileLabelSide:  'right',
+    mobileLabelSide:  'left',
     coords: { sector: 'M-1', dist: '1.0 AU', apps: '∞ items' },
   },
 ]
@@ -383,13 +383,13 @@ export default function Universe() {
           {hoveredPlanet && !clickedPlanet && (
             <motion.div
               key={hoveredPlanet.id + lang}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
+              exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.28, ease: 'easeOut' }}
               style={{
                 position: 'absolute',
-                bottom: '3rem',
+                top: isMobile ? '5.8rem' : '5.5rem',
                 left: 0,
                 right: 0,
                 textAlign: 'center',

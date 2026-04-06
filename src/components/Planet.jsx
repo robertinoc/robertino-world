@@ -8,7 +8,6 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
   const groupRef       = useRef()
   const meshRef        = useRef()
   const glowRef        = useRef()
-  const innerGlowRef   = useRef()
   const [hovered, setHovered] = useState(false)
 
   const isStar = data.celestialType === 'star'
@@ -65,9 +64,6 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
         const breathe = 1 + Math.sin(t * 1.4) * 0.04
         glowRef.current.scale.setScalar(breathe)
       }
-      if (innerGlowRef.current?.material) {
-        innerGlowRef.current.material.opacity = glowOpacityRef.current * 0.3
-      }
     } else {
       // ── Planet: glow only on hover / click ──
       const targetGlow       = active ? 1.0 : 0.0
@@ -93,31 +89,19 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
       {isStar ? (
         // ── Star body ────────────────────────────────────────────────────────
         <>
-          {/* Bright core sphere */}
+          {/* Bright white-blue core — high luminance triggers Bloom star effect */}
           <mesh ref={meshRef} {...pointerHandlers}>
             <sphereGeometry args={[data.radius, 32, 32]} />
-            <meshBasicMaterial color={data.color} />
+            <meshBasicMaterial color="#dbeafe" />
           </mesh>
 
-          {/* Inner halo — close glow ring */}
-          <mesh ref={innerGlowRef}>
-            <sphereGeometry args={[data.radius * 1.4, 16, 16]} />
-            <meshBasicMaterial
-              color={data.color}
-              transparent
-              opacity={0.08}
-              side={THREE.BackSide}
-              depthWrite={false}
-            />
-          </mesh>
-
-          {/* Outer glow — drives Bloom */}
+          {/* Tight coloured halo — BackSide at small radius stays circular, not disc */}
           <mesh ref={glowRef}>
-            <sphereGeometry args={[data.radius * 2.2, 16, 16]} />
+            <sphereGeometry args={[data.radius * 1.35, 16, 16]} />
             <meshBasicMaterial
               color={data.color}
               transparent
-              opacity={0.28}
+              opacity={0.18}
               side={THREE.BackSide}
               depthWrite={false}
             />

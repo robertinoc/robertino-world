@@ -35,9 +35,9 @@ function NebulaCloud({ position, color, count = 400, spread = 7, rotSpeed = 0.01
       </bufferGeometry>
       <pointsMaterial
         color={color}
-        size={0.07}
+        size={0.06}
         transparent
-        opacity={0.3}
+        opacity={0.14}
         sizeAttenuation
         depthWrite={false}
       />

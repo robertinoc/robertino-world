@@ -88,24 +88,24 @@ const PLANET_DEFS = [
     mobileLabelSide:  'right',
     coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
   },
-  // 4 — Apps  (star / moon — no photo, procedural glow)
+  // 4 — Apps  (marketplace — procedural canvas texture, orbital ring)
   {
     id: 'apps',
     name: { en: 'Apps', es: 'Apps' },
-    radius: 0.52,       mobileRadius: 0.4,
-    color: '#93c5fd',
-    emissive: '#3b82f6',
-    hasRings: false,
-    ringColor: null,
-    celestialType: 'star',
+    radius: 0.95,       mobileRadius: 0.72,
+    color: '#f97316',
+    emissive: '#ea580c',
+    hasRings: true,
+    ringColor: '#fb923c',
+    celestialType: 'marketplace',
     url: 'https://apps.robertino.world',
-    description: { en: 'Tools & Creations', es: 'Herramientas & Creaciones' },
+    description: { en: 'Tools & Marketplace', es: 'Herramientas & Marketplace' },
     texture: null,
-    desktopPos: [0, -2.6, 0],
-    mobilePos:  [0, -1.9, 0],
+    desktopPos: [0, -2.8, 0],
+    mobilePos:  [0, -2.0, 0],
     desktopLabelSide: 'right',
     mobileLabelSide:  'right',
-    coords: { sector: 'λ-1', dist: '1.0 AU', type: 'Star' },
+    coords: { sector: 'M-1', dist: '1.0 AU', apps: '∞ items' },
   },
 ]
 
@@ -176,12 +176,12 @@ export default function Universe() {
         style={{ background: '#020408' }}
       >
         <fog attach="fog" args={['#020408', 28, 95]} />
-        <ambientLight intensity={1.4} />
-        <directionalLight position={[5, 5, 5]} intensity={0.7} />
-        <pointLight position={[-13, 4, 2]}  intensity={1.3} color="#a855f7" />
-        <pointLight position={[13, -4, 2]}  intensity={1.0} color="#06b6d4" />
-        <pointLight position={[0,   9, -6]} intensity={0.8} color="#f59e0b" />
-        <Stars radius={220} depth={100} count={6000} factor={3.5} saturation={0.1} fade speed={0.3} />
+        <ambientLight intensity={0.7} />
+        <directionalLight position={[5, 5, 5]} intensity={0.35} />
+        <pointLight position={[-13, 4, 2]}  intensity={0.8} color="#a855f7" />
+        <pointLight position={[13, -4, 2]}  intensity={0.6} color="#06b6d4" />
+        <pointLight position={[0,   9, -6]} intensity={0.5} color="#f59e0b" />
+        <Stars radius={220} depth={100} count={4500} factor={2.0} saturation={0.1} fade speed={0.3} />
         <Nebula />
         {planets.map((planet) => (
           <Planet
@@ -195,7 +195,7 @@ export default function Universe() {
         <CameraController target={clickedPlanet} isMobile={isMobile} />
         <ScreenPositionTracker planets={planets} hudPosRef={hudPosRef} />
         <EffectComposer>
-          <Bloom intensity={1.8} luminanceThreshold={0.18} luminanceSmoothing={0.85} radius={0.88} />
+          <Bloom intensity={1.6} luminanceThreshold={0.18} luminanceSmoothing={0.85} radius={0.88} />
           <Vignette eskil={false} offset={0.14} darkness={0.95} />
         </EffectComposer>
         <AdaptiveDpr pixelSizes={[0.5, 0.75, 1]} />

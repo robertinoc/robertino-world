@@ -102,7 +102,7 @@ const PLANET_DEFS = [
     description: { en: 'Tools & Creations', es: 'Herramientas & Creaciones' },
     texture: null,
     desktopPos: [0, -2.6, 0],
-    mobilePos:  [0, -2.1, 0],
+    mobilePos:  [0, -1.9, 0],
     desktopLabelSide: 'right',
     mobileLabelSide:  'right',
     coords: { sector: 'λ-1', dist: '1.0 AU', type: 'Star' },

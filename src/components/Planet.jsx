@@ -27,57 +27,106 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
     canvas.height = 512
     const ctx = canvas.getContext('2d')
 
-    // Dark radial base
-    const bg = ctx.createRadialGradient(256, 256, 0, 256, 256, 256)
-    bg.addColorStop(0, '#111827')
-    bg.addColorStop(1, '#050810')
-    ctx.fillStyle = bg
+    // Deep charcoal base matching apps.robertino.world
+    ctx.fillStyle = '#0e0e0e'
     ctx.fillRect(0, 0, 512, 512)
 
-    // 5×5 app-icon grid
-    const palette = [
-      '#f97316','#a855f7','#06b6d4','#22c55e','#f59e0b',
-      '#ec4899','#3b82f6','#10b981','#e11d48','#8b5cf6',
-      '#0ea5e9','#84cc16','#f43f5e','#14b8a6','#fb923c',
+    // Subtle purple→blue radial vignette in the centre
+    const vignette = ctx.createRadialGradient(256, 256, 60, 256, 256, 320)
+    vignette.addColorStop(0, '#9B30D018')
+    vignette.addColorStop(0.5, '#4A90FF0c')
+    vignette.addColorStop(1, 'transparent')
+    ctx.fillStyle = vignette
+    ctx.fillRect(0, 0, 512, 512)
+
+    // 4×4 app-card grid — dark cards + red/purple accents like the real site
+    const accentRed    = '#e84c4c'
+    const accentPurple = '#9B30D0'
+    const accentBlue   = '#4A90FF'
+    // featured = red, purple, or blue; most are plain #1a1a1a cards
+    const cardAccents = [
+      accentRed, null, accentBlue, null,
+      null, accentPurple, null, accentRed,
+      accentBlue, null, accentRed, null,
+      null, accentBlue, null, accentPurple,
     ]
-    const cols = 5, rows = 5
+
+    const cols = 4, rows = 4
     const cW = 512 / cols, cH = 512 / rows
-    const pad = cW * 0.18
+    const pad = cW * 0.14
+    const gap = 6
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
+        const idx = r * cols + c
+        const accent = cardAccents[idx]
         const x  = c * cW + pad
         const y  = r * cH + pad
-        const w  = cW - pad * 2
-        const cr = w * 0.22
-        const cl = palette[(r * cols + c) % palette.length]
+        const w  = cW - pad * 2 - gap
+        const h  = cH - pad * 2 - gap
+        const cr = w * 0.18
 
-        // Soft glow behind icon
-        const glow = ctx.createRadialGradient(x + w/2, y + w/2, 0, x + w/2, y + w/2, w)
-        glow.addColorStop(0, cl + '30')
-        glow.addColorStop(1, 'transparent')
-        ctx.fillStyle = glow
-        ctx.beginPath(); ctx.arc(x + w/2, y + w/2, w, 0, Math.PI * 2); ctx.fill()
-
-        // Rounded rect icon
-        ctx.fillStyle   = cl + '55'
-        ctx.strokeStyle = cl + 'cc'
-        ctx.lineWidth   = 1.5
+        // Card background
+        ctx.fillStyle = '#1a1a1a'
         ctx.beginPath()
         ctx.moveTo(x + cr, y)
-        ctx.lineTo(x + w - cr, y);  ctx.quadraticCurveTo(x + w, y,     x + w, y + cr)
-        ctx.lineTo(x + w, y + w - cr); ctx.quadraticCurveTo(x + w, y + w, x + w - cr, y + w)
-        ctx.lineTo(x + cr, y + w);  ctx.quadraticCurveTo(x,     y + w, x,     y + w - cr)
-        ctx.lineTo(x, y + cr);      ctx.quadraticCurveTo(x,     y,     x + cr, y)
+        ctx.lineTo(x + w - cr, y);         ctx.quadraticCurveTo(x + w, y,     x + w, y + cr)
+        ctx.lineTo(x + w, y + h - cr);     ctx.quadraticCurveTo(x + w, y + h, x + w - cr, y + h)
+        ctx.lineTo(x + cr, y + h);         ctx.quadraticCurveTo(x,     y + h, x,     y + h - cr)
+        ctx.lineTo(x, y + cr);             ctx.quadraticCurveTo(x,     y,     x + cr, y)
         ctx.closePath()
-        ctx.fill(); ctx.stroke()
+        ctx.fill()
 
-        // "Free" / "Pro" dot indicator on some icons
-        if ((r * cols + c) % 4 === 0) {
-          ctx.fillStyle = '#ffffff99'
-          ctx.beginPath(); ctx.arc(x + w - 7, y + 7, 3.5, 0, Math.PI * 2); ctx.fill()
+        // Border — accent colour or subtle gray
+        ctx.strokeStyle = accent ? accent + 'bb' : '#2a2a2a'
+        ctx.lineWidth   = accent ? 1.8 : 1
+        ctx.stroke()
+
+        // Top accent bar on featured cards
+        if (accent) {
+          const barH = h * 0.12
+          const barGrad = ctx.createLinearGradient(x, y, x + w, y)
+          barGrad.addColorStop(0, accent + 'cc')
+          barGrad.addColorStop(1, accent + '00')
+          ctx.fillStyle = barGrad
+          ctx.beginPath()
+          ctx.moveTo(x + cr, y)
+          ctx.lineTo(x + w - cr, y); ctx.quadraticCurveTo(x + w, y, x + w, y + cr)
+          ctx.lineTo(x + w, y + barH)
+          ctx.lineTo(x, y + barH)
+          ctx.lineTo(x, y + cr);     ctx.quadraticCurveTo(x, y, x + cr, y)
+          ctx.closePath()
+          ctx.fill()
+        }
+
+        // Tiny icon placeholder dot in card centre
+        const dotColor = accent || '#555555'
+        ctx.fillStyle = dotColor + '99'
+        ctx.beginPath()
+        ctx.arc(x + w / 2, y + h * 0.45, w * 0.14, 0, Math.PI * 2)
+        ctx.fill()
+
+        // "PRO" badge on some cards
+        if (idx % 5 === 0) {
+          ctx.fillStyle = accentRed + 'ee'
+          const bx = x + w - 2, by = y + 3, bw = 22, bh = 9
+          ctx.beginPath(); ctx.roundRect(bx - bw, by, bw, bh, 3); ctx.fill()
+          ctx.fillStyle = '#ffffff'
+          ctx.font = 'bold 6px sans-serif'
+          ctx.textAlign = 'center'
+          ctx.fillText('PRO', bx - bw / 2, by + 6.5)
         }
       }
+    }
+
+    // Faint grid lines to evoke a dashboard feel
+    ctx.strokeStyle = '#ffffff08'
+    ctx.lineWidth = 0.5
+    for (let i = 1; i < cols; i++) {
+      ctx.beginPath(); ctx.moveTo(i * cW, 0); ctx.lineTo(i * cW, 512); ctx.stroke()
+    }
+    for (let i = 1; i < rows; i++) {
+      ctx.beginPath(); ctx.moveTo(0, i * cH); ctx.lineTo(512, i * cH); ctx.stroke()
     }
 
     const tex = new THREE.CanvasTexture(canvas)

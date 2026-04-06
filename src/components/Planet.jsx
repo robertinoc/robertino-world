@@ -101,11 +101,11 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
 
           {/* Inner halo — close glow ring */}
           <mesh ref={innerGlowRef}>
-            <sphereGeometry args={[data.radius * 1.6, 16, 16]} />
+            <sphereGeometry args={[data.radius * 1.4, 16, 16]} />
             <meshBasicMaterial
               color={data.color}
               transparent
-              opacity={0.12}
+              opacity={0.08}
               side={THREE.BackSide}
               depthWrite={false}
             />
@@ -113,11 +113,11 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
 
           {/* Outer glow — drives Bloom */}
           <mesh ref={glowRef}>
-            <sphereGeometry args={[data.radius * 3.0, 16, 16]} />
+            <sphereGeometry args={[data.radius * 2.2, 16, 16]} />
             <meshBasicMaterial
               color={data.color}
               transparent
-              opacity={0.38}
+              opacity={0.28}
               side={THREE.BackSide}
               depthWrite={false}
             />

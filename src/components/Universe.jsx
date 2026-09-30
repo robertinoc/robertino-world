@@ -43,7 +43,8 @@ const PLANET_DEFS = [
     emissive: '#7c3aed',
     hasRings: false,
     ringColor: null,
-    url: 'https://music.robertino.world',
+    url: 'https://stagelink.art/es/robertinoc',   // ROBERTINOC artist page — always a new tab
+    newTab: true,
     description: { en: 'Sounds & Vibes', es: 'Sonidos & Vibras' },
     texture: '/images/planet-music.jpg',
     desktopPos: [-5.5, 0, 0],
@@ -146,14 +147,23 @@ export default function Universe() {
     if (clickedPlanet || warping) return
     setClickedPlanet(planet)
     setWarpColor(planet.color)
+    // Mobile browsers block window.open() inside setTimeout (popup blocker).
+    // For planets that must open in a new tab, open a blank tab synchronously
+    // (still inside the user gesture) and point it at the URL after the warp.
+    let pending = null
+    if (isMobile && planet.newTab) {
+      pending = window.open('', '_blank')
+      if (pending) pending.opener = null
+    }
     setTimeout(() => setWarping(true), 850)
     setTimeout(() => {
-      // Mobile browsers block window.open() inside setTimeout (popup blocker).
-      // Use location.href on mobile — always allowed, even deferred.
-      if (isMobile) {
+      if (pending) {
+        pending.location.href = planet.url
+      } else if (isMobile && !planet.newTab) {
+        // Same tab on mobile — always allowed, even deferred.
         window.location.href = planet.url
       } else {
-        window.open(planet.url, '_blank')
+        window.open(planet.url, '_blank', 'noopener')
       }
     }, 1700)
     setTimeout(() => { setClickedPlanet(null); setWarping(false) }, 2500)

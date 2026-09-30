@@ -166,7 +166,8 @@ export function PlanetHUDOverlay({
 
         const side = planet.labelSide
         // Push label from planet center outward by ~planet-radius in pixels
-        const offsetPx = isMobile ? 58 : 85
+        const offsetPx =
+          planet.labelOffsetPx?.[isMobile ? 'mobile' : 'desktop'] ?? (isMobile ? 58 : 85)
         const ox = side === 'right' ? offsetPx : side === 'left' ? -offsetPx : 0
         const oy = side === 'below' ? offsetPx : side === 'above' ? -offsetPx : 0
 

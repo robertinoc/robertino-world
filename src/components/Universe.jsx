@@ -15,7 +15,7 @@ import { ScreenPositionTracker, PlanetHUDOverlay } from './PlanetHUD'
 // ── Translations ────────────────────────────────────────────────────────────
 const T = {
   en: {
-    subtitle:    'Welcome to my universe',
+    subtitle:    'Growth & Marketing for B2B tech · Founder · DJ',
     hintDesktop: 'move to explore · click to enter',
     hintMobile:  'scroll to explore · tap to enter',
     ctaDesktop:  'click to explore →',
@@ -23,7 +23,7 @@ const T = {
     entering:    (name) => `entering ${name}`,
   },
   es: {
-    subtitle:    'Bienvenido a mi universo',
+    subtitle:    'Growth & Marketing para B2B tech · Fundador · DJ',
     hintDesktop: 'muévete para explorar · haz clic para entrar',
     hintMobile:  'desliza para explorar · toca para entrar',
     ctaDesktop:  'haz clic para explorar →',
@@ -33,67 +33,77 @@ const T = {
 }
 
 // ── Planet definitions ────────────────────────────────────────────────────
+// Visual hierarchy (2026-09): Professional is the primary body (largest, centre,
+// constant glow + accent ring). ROBERTINOC is secondary (left, soft glow).
+// ROBERTINOTALK is on pause, so it sits further back, smaller and dimmer.
 const PLANET_DEFS = [
-  // 1 — Music  (desktop: left | mobile: top-left)
-  {
-    id: 'music',
-    name: { en: 'Music', es: 'Música' },
-    radius: 1.4,       mobileRadius: 1.0,
-    color: '#a855f7',
-    emissive: '#7c3aed',
-    hasRings: false,
-    ringColor: null,
-    url: 'https://stagelink.art/es/robertinoc',   // ROBERTINOC artist page — always a new tab
-    newTab: true,
-    description: { en: 'Sounds & Vibes', es: 'Sonidos & Vibras' },
-    texture: '/images/planet-music.jpg',
-    desktopPos: [-5.5, 0, 0],
-    mobilePos:  [-1.8, 3.4, 0],
-    desktopLabelSide: 'left',
-    mobileLabelSide:  'below',
-    coords: { sector: 'Ω-7', dist: '4.2 AU', freq: '432 Hz' },
-  },
-  // 2 — Ideas  (desktop: center | mobile: top-right)
-  {
-    id: 'ideas',
-    name: { en: 'Ideas', es: 'Ideas' },
-    radius: 1.2,       mobileRadius: 0.9,
-    color: '#06b6d4',
-    emissive: '#0891b2',
-    hasRings: false,
-    ringColor: null,
-    url: 'https://robertinotalk.robertino.world',
-    description: { en: 'Thoughts & Talk', es: 'Pensamientos & Charlas' },
-    texture: '/images/planet-ideas.jpg?v=2',
-    desktopPos: [0, 0, 0],
-    mobilePos:  [1.8, 3.4, 0],
-    desktopLabelSide: 'below',
-    mobileLabelSide:  'below',
-    coords: { sector: 'Δ-3', dist: '7.1 AU', freq: '528 Hz' },
-  },
-  // 3 — Professional  (desktop: right | mobile: bottom-left)
+  // 1 — Professional  (desktop: centre | mobile: top-left)  ── PRIMARY
   {
     id: 'professional',
     name: { en: 'Professional', es: 'Profesional' },
-    radius: 1.3,       mobileRadius: 0.95,
+    radius: 1.75,      mobileRadius: 1.15,
     color: '#f59e0b',
     emissive: '#d97706',
     hasRings: false,
     ringColor: null,
+    baseGlow: 0.55,          // always-on halo (0 = hover only)
+    accentRing: '#fbbf24',   // thin orbital ring marking the primary body
     url: 'https://resume.robertino.world',
-    description: { en: 'Work & Journey', es: 'Trabajo & Trayectoria' },
+    description: { en: 'Growth & Product Marketing · Resume', es: 'Growth & Product Marketing · CV' },
     texture: '/images/planet-professional.jpg',
-    desktopPos: [5.5, 0, 0],
+    desktopPos: [0, 0.35, 0],
+    mobilePos:  [-1.8, 3.4, 0],
+    desktopLabelSide: 'below',
+    mobileLabelSide:  'below',
+    labelOffsetPx: { desktop: 128, mobile: 82 },
+    coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
+  },
+  // 2 — ROBERTINOC  (desktop: left | mobile: top-right)  ── SECONDARY
+  {
+    id: 'music',
+    name: { en: 'ROBERTINOC', es: 'ROBERTINOC' },
+    radius: 1.3,       mobileRadius: 0.95,
+    color: '#a855f7',
+    emissive: '#7c3aed',
+    hasRings: false,
+    ringColor: null,
+    baseGlow: 0.3,
+    url: 'https://stagelink.art/es/robertinoc',   // ROBERTINOC artist page — always a new tab
+    newTab: true,
+    description: { en: 'DJ & Producer', es: 'DJ y productor' },
+    texture: '/images/planet-music.jpg',
+    desktopPos: [-5.4, 0, 0],
+    mobilePos:  [1.8, 3.4, 0],
+    desktopLabelSide: 'below',
+    mobileLabelSide:  'below',
+    labelOffsetPx: { desktop: 100, mobile: 68 },
+    coords: { sector: 'Ω-7', dist: '4.2 AU', freq: '432 Hz' },
+  },
+  // 3 — ROBERTINOTALK  (desktop: right, further back | mobile: bottom-left)  ── ON PAUSE
+  {
+    id: 'ideas',
+    name: { en: 'ROBERTINOTALK', es: 'ROBERTINOTALK' },
+    radius: 0.85,      mobileRadius: 0.62,
+    color: '#06b6d4',
+    emissive: '#0891b2',
+    hasRings: false,
+    ringColor: null,
+    dim: 0.62,               // darkens the photo so it recedes
+    url: 'https://robertinotalk.robertino.world',
+    description: { en: 'Yoga, wellness & talks', es: 'Yoga, bienestar y charlas' },
+    texture: '/images/planet-ideas.jpg?v=2',
+    desktopPos: [5.4, -0.9, -1.2],
     mobilePos:  [-1.8, -0.6, 0],
     desktopLabelSide: 'right',
     mobileLabelSide:  'below',
-    coords: { sector: 'Σ-9', dist: '2.8 AU', signal: 'Active' },
+    labelOffsetPx: { desktop: 62, mobile: 46 },
+    coords: { sector: 'Δ-3', dist: '7.1 AU', freq: '528 Hz' },
   },
   // 4 — Apps  (marketplace — procedural canvas texture, orbital ring)
   {
     id: 'apps',
     name: { en: 'Apps', es: 'Apps' },
-    radius: 0.95,       mobileRadius: 0.72,
+    radius: 0.85,       mobileRadius: 0.72,
     color: '#f97316',
     emissive: '#ea580c',
     hasRings: true,
@@ -102,7 +112,7 @@ const PLANET_DEFS = [
     url: 'https://apps.robertino.world',
     description: { en: 'Tools & Marketplace', es: 'Herramientas & Marketplace' },
     texture: null,
-    desktopPos: [0, -2.8, 0],
+    desktopPos: [0, -3.95, 0],
     mobilePos:  [1.8, -0.6, 0],
     desktopLabelSide: 'right',
     mobileLabelSide:  'below',

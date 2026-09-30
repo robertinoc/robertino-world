@@ -13,9 +13,10 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
   const isStar        = data.celestialType === 'star'
   const isMarketplace = data.celestialType === 'marketplace'
 
+  const baseGlow      = data.baseGlow ?? 0          // constant halo for emphasised planets
   const scaleRef       = useRef(1)
-  // Stars always glow — planets only on hover/click
-  const glowOpacityRef = useRef(isStar ? 0.38 : 0)
+  // Stars always glow — planets only on hover/click (or constantly when baseGlow > 0)
+  const glowOpacityRef = useRef(isStar ? 0.38 : baseGlow)
 
   const { gl } = useThree()
 
@@ -182,8 +183,9 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
         glowRef.current.scale.setScalar(breathe)
       }
     } else {
-      // ── Planet: glow only on hover / click ──
-      const targetGlow       = active ? 1.0 : 0.0
+      // ── Planet: glow on hover / click, plus a slow-breathing base halo if emphasised ──
+      const idleGlow         = baseGlow > 0 ? baseGlow + Math.sin(t * 0.9) * baseGlow * 0.18 : 0
+      const targetGlow       = active ? 1.0 : idleGlow
       glowOpacityRef.current = THREE.MathUtils.lerp(glowOpacityRef.current, targetGlow, 0.06)
       if (glowRef.current?.material) {
         const breathe = 1 + glowOpacityRef.current * 0.08 + Math.sin(t * 1.6) * glowOpacityRef.current * 0.025
@@ -193,6 +195,8 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
       }
     }
   })
+
+  const dimColor = data.dim ? new THREE.Color(data.dim, data.dim, data.dim) : '#ffffff'
 
   const pointerHandlers = {
     onPointerOver: (e) => { e.stopPropagation(); setHovered(true);  onHover(data) },
@@ -253,8 +257,19 @@ export default function Planet({ data, isClicked, onHover, onClick }) {
         <>
           <mesh ref={meshRef} {...pointerHandlers}>
             <circleGeometry args={[data.radius, 128]} />
-            <meshBasicMaterial color="#ffffff" transparent />
+            {/* `dim` (0-1) multiplies the photo so de-emphasised planets recede */}
+            <meshBasicMaterial color={dimColor} transparent />
           </mesh>
+
+          {/* Accent ring — marks the primary body */}
+          {data.accentRing && (
+            <group rotation={[Math.PI / 2.6, 0.25, 0]}>
+              <mesh>
+                <torusGeometry args={[data.radius * 1.32, 0.022, 4, 140]} />
+                <meshBasicMaterial color={data.accentRing} transparent opacity={0.55} depthWrite={false} />
+              </mesh>
+            </group>
+          )}
 
           <mesh ref={glowRef}>
             <sphereGeometry args={[data.radius * 1.28, 32, 32]} />

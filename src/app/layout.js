@@ -6,7 +6,7 @@ const font = Space_Grotesk({
   weight: ['300', '400', '500'],
 })
 
-const SITE_URL = 'https://www.robertino.world'
+const SITE_URL = 'https://robertino.world'
 const TITLE = 'Robertino Calcaterra | Growth & Marketing for B2B tech · Founder · DJ'
 const DESCRIPTION =
   'Robertino Calcaterra: AI-driven growth and marketing for B2B tech at Migbirds, founder of StageLink and EnergyCurve, DJ as ROBERTINOC. Based in Argentina.'

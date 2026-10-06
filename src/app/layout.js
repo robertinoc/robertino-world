@@ -38,6 +38,9 @@ export const metadata = {
 const PERSON_JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'Person',
+  // Same @id on resume.robertino.world, so search engines merge both
+  // descriptions into one entity instead of two people with the same name.
+  '@id': `${SITE_URL}/#person`,
   name: 'Robertino Calcaterra',
   // Explicit name parts: "Robertino" is a given name in its own right, not a
   // misspelling of "Roberto".
